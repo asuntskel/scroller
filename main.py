@@ -5,7 +5,6 @@ print(ground)
 
 char = "o"
 ground[5] = char
-
 def clear():
     os.system("CLS")
 
