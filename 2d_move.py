@@ -1,7 +1,9 @@
 import os
 
-size = 20
-grid = [["_" for i in range(size)] for i in range(size)]
+size = 5
+maps = {"blank" : [["_" for i in range(size)] for i in range(size)]}
+
+
 
 class Char():
 	def __init__(self, x, y, icon):
@@ -14,46 +16,62 @@ class Char():
 	def getPosition(self):
 		return (self.x, self.y)
 
-	def move(self, direction):
+	def move(self, key_direction):
 		self.lastx = self.getPosition()[0]
 		self.lasty = self.getPosition()[1]
-		if direction == "a":
-			self.x -= 1
-		elif direction == "d":
-			self.x += 1
-		elif direction == "w":
-			self.y -= 1
-		elif direction == "s":
-			self.y += 1
+		
 
-def keyInput(input):
-	
-	if input == "a":
-		self.move(nextx-1, self.lastx)
+		limit_value_inc = -1 if key_direction == "a" and self.x > 0 else 0
+		self.x += limit_value_inc
+		
+		limit_value_inc = 1 if key_direction == "d" and self.x < size -1 else 0
+		self.x += limit_value_inc
+
+		if key_direction == "w":
+			if self.y > 0:
+				self.y -= 1
+			else:
+				self.y = self.y
+
+		if key_direction == "s":
+			if self.y < size-1:
+				self.y += 1
+			else:
+				self.y = self.y
 
 
 
-character = Char(1,5, "O")
-enemy = Char(0,8, "W")
+
+character = Char(3,3, "$")
+enemy = Char(0,1, "Z")
 entities = [character, enemy]
+def refresh_console():
+	return os.system('CLS')
 
-def build_map(tilemap):
+def add_entities():
+	# set the entities icons in the according coordinates
+	# then print the whole grid with its entities
+
 	for entity in entities:
+		
 		grid[entity.y][entity.x] = entity.icon
+		print("DEBUG", entity.icon, entity.x, entity.y)
+		#if entity.y != entity.lasty and entity.x != entity.lastx:
+			#grid[entity.lasty][entity.lastx] = "*"
 
-		if grid[entity.lasty][entity.lastx] != "_":
-			grid[entity.lasty][entity.lastx] = "_"
-
-	for row in tilemap:
+	for row in grid:
 		print(row)
+	return grid
+
+grid = maps['blank']
 
 while True:
-	os.system('CLS')
-	for entity in entities:
-		print(entity.x, entity.y)
-	build_map(grid)
-	
+	refresh_console()
+	add_entities()
 	character.move(input())
+
+
+
 
 
 
